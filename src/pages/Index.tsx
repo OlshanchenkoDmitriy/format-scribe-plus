@@ -26,37 +26,40 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6 max-w-4xl">
-        <div className="space-y-6">
-          {/* Main Text Area */}
-          <div className="space-y-3">
+      <div className="flex h-[calc(100vh-80px)]">
+        {/* Left Panel - Text Area */}
+        <div className="flex-1 flex flex-col p-4">
+          <div className="flex-1 space-y-3">
             <Textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Вставьте или введите ваш текст здесь..."
-              className="min-h-[200px] bg-editor-bg border-editor-border text-foreground resize-none text-sm leading-relaxed shadow-card"
-              style={{ height: `${Math.max(200, text.split('\n').length * 24 + 48)}px` }}
+              className="min-h-full bg-editor-bg border-editor-border text-foreground resize-none text-sm leading-relaxed shadow-card"
             />
-            <TextStats text={text} />
+            <div className="flex justify-between items-center">
+              <TextStats text={text} />
+              {/* Basic Actions */}
+              <BasicActions
+                text={text}
+                onTextChange={setText}
+                onUndo={undo}
+                onRedo={redo}
+                canUndo={canUndo}
+                canRedo={canRedo}
+              />
+            </div>
           </div>
+        </div>
 
-          {/* Basic Actions */}
-          <div className="bg-card border border-editor-border rounded-lg">
-            <BasicActions
-              text={text}
-              onTextChange={setText}
-              onUndo={undo}
-              onRedo={redo}
-              canUndo={canUndo}
-              canRedo={canRedo}
-            />
+        {/* Right Panel - Tools */}
+        <div className="w-80 border-l border-editor-border bg-card/30 overflow-y-auto">
+          <div className="p-4 space-y-4">
+            {/* Symbol Actions */}
+            <SymbolActions text={text} onTextChange={setText} />
+
+            {/* Frequent Actions */}
+            <FrequentActions text={text} onTextChange={setText} />
           </div>
-
-          {/* Symbol Actions */}
-          <SymbolActions text={text} onTextChange={setText} />
-
-          {/* Frequent Actions */}
-          <FrequentActions text={text} onTextChange={setText} />
         </div>
       </div>
     </div>
