@@ -40,11 +40,11 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     /* Custom tokens for Text Formatter Pro */
-    --editor-bg: 222.2 84% 3%;
-    --editor-border: 217.2 32.6% 20%;
-    --stats-bg: 217.2 32.6% 12%;
-    --symbol-button: 217.2 32.6% 15%;
-    --symbol-button-hover: 217.2 32.6% 25%;
+    --editor-bg: 217.2 32.6% 12%;
+    --editor-border: 217.2 32.6% 25%;
+    --stats-bg: 217.2 32.6% 15%;
+    --symbol-button: 217.2 32.6% 18%;
+    --symbol-button-hover: 217.2 32.6% 28%;
     --action-button: 217.2 32.6% 20%;
     --action-button-hover: 217.2 32.6% 30%;
     --warning: 30 100% 50%;
