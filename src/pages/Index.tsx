@@ -81,17 +81,17 @@ const Index = () => {
       default: // editor
         return (
           <>
-            <div className="flex h-[calc(100vh-80px)]">
-              {/* Left Panel - Text Area */}
+            <div className="flex flex-col md:flex-row h-[calc(100vh-80px)]">
+              {/* Main Panel - Text Area */}
               <div className="flex-1 flex flex-col p-4">
                 <div className="flex-1 space-y-3">
                   <Textarea
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Вставьте или введите ваш текст здесь..."
-                    className="min-h-full bg-editor-bg border-editor-border text-foreground resize-none text-sm leading-relaxed shadow-card"
+                    className="min-h-full bg-editor-bg border-editor-border text-foreground resize-none text-sm leading-relaxed shadow-card w-full"
                   />
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                     <TextStats text={text} />
                     <BasicActions
                       text={text}
@@ -105,8 +105,8 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Right Panel - Tools */}
-              <div className="w-80 border-l border-editor-border bg-card/30 overflow-y-auto">
+              {/* Right Panel - Tools (Hidden on mobile) */}
+              <div className="hidden md:block w-80 border-l border-editor-border bg-card/30 overflow-y-auto">
                 <div className="p-4 space-y-4">
                   <SearchReplace text={text} onTextChange={setText} />
                   <SymbolActions text={text} onTextChange={setText} />
