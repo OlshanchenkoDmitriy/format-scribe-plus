@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Clipboard, Copy, Eraser, Undo, Redo } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { VoiceInput } from "./VoiceInput";
 
 interface BasicActionsProps {
   text: string;
@@ -57,6 +58,12 @@ export const BasicActions = ({
     });
   };
 
+  const handleVoiceText = (voiceText: string) => {
+    const currentText = text;
+    const newText = currentText ? currentText + ' ' + voiceText : voiceText;
+    onTextChange(newText);
+  };
+
   return (
     <div className="flex gap-2 p-2">
       <Button
@@ -77,6 +84,8 @@ export const BasicActions = ({
       >
         <Copy className="h-4 w-4" />
       </Button>
+      
+      <VoiceInput onTextReceived={handleVoiceText} append={true} />
       
       <Button
         variant="secondary"

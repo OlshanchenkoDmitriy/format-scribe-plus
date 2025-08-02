@@ -53,10 +53,15 @@ All colors MUST be HSL.
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(142 71% 45%), hsl(142 71% 40%));
     --gradient-accent: linear-gradient(135deg, hsl(217.2 32.6% 20%), hsl(217.2 32.6% 15%));
+    --gradient-voice: linear-gradient(45deg, hsl(120 60% 50%), hsl(160 60% 45%));
+    --gradient-suno: linear-gradient(45deg, hsl(340 75% 55%), hsl(280 65% 60%));
+    --gradient-history: linear-gradient(45deg, hsl(200 60% 50%), hsl(220 60% 60%));
     
     /* Shadows */
     --shadow-glow: 0 0 20px hsl(142 71% 45% / 0.1);
     --shadow-card: 0 4px 12px hsl(222.2 84% 1% / 0.3);
+    --shadow-voice: 0 0 30px hsl(120 60% 50% / 0.3);
+    --shadow-suno: 0 0 30px hsl(340 75% 55% / 0.3);
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
