@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { TextStats } from "@/components/TextStats";
 import { BasicActions } from "@/components/BasicActions";
 import { SymbolActions } from "@/components/SymbolActions";
@@ -15,8 +17,10 @@ import { FileText } from "lucide-react";
 
 const Index = () => {
   const { text, setText, undo, redo, canUndo, canRedo } = useTextHistory();
+  const [voiceText, setVoiceText] = useState('');
   const [activeTab, setActiveTab] = useState('editor');
   const [sunoText, setSunoText] = useState('');
+  const { toast } = useToast();
 
   // Save to history when text changes
   useEffect(() => {
@@ -42,17 +46,61 @@ const Index = () => {
       case 'voice':
         return (
           <div className="p-4 space-y-4">
-            <div className="text-center space-y-4">
-              <div className="p-8 bg-gradient-voice/10 rounded-lg border border-[hsl(120_60%_50%_/_0.3)]">
-                <h2 className="text-xl font-bold mb-4">Голосовой ввод</h2>
-                <VoiceInput onTextReceived={setText} />
-                <p className="text-sm text-muted-foreground mt-4">
-                  Нажмите на микрофон для начала голосового ввода
+            <div className="space-y-4">
+              <div className="p-6 bg-gradient-voice/10 rounded-lg border border-[hsl(120_60%_50%_/_0.3)]">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                  <h2 className="text-xl font-bold">Голосовой ввод</h2>
+                  <VoiceInput onTextReceived={setVoiceText} />
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Поддержка русского и английского языков. Говорите естественно.
                 </p>
+                
+                <Textarea
+                  value={voiceText}
+                  onChange={(e) => setVoiceText(e.target.value)}
+                  placeholder="Распознанный текст появится здесь..."
+                  className="min-h-[300px] bg-editor-bg border-editor-border text-foreground resize-none text-sm leading-relaxed shadow-card w-full"
+                />
+                
+                <div className="flex flex-wrap gap-2 mt-4">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      setText(voiceText);
+                      toast({ description: "Текст сохранен в редактор" });
+                    }}
+                    className="bg-action-button hover:bg-action-button-hover"
+                  >
+                    Сохранить в редактор
+                  </Button>
+                  <Button
+                    variant="secondary" 
+                    size="sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(voiceText);
+                      toast({ description: "Текст скопирован в буфер обмена" });
+                    }}
+                    className="bg-action-button hover:bg-action-button-hover"
+                  >
+                    Копировать
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      setVoiceText('');
+                      toast({ description: "Текст очищен" });
+                    }}
+                    className="bg-action-button hover:bg-action-button-hover"
+                  >
+                    Очистить
+                  </Button>
+                </div>
               </div>
             </div>
-            <EnhancedTextStats text={text} />
-            <SearchReplace text={text} onTextChange={setText} />
+            <EnhancedTextStats text={voiceText} />
           </div>
         );
 

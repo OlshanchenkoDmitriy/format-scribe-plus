@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Square } from "lucide-react";
+import { Mic, Square } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface VoiceInputProps {
@@ -11,7 +11,9 @@ interface VoiceInputProps {
 export const VoiceInput = ({ onTextReceived, append = false }: VoiceInputProps) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<'ru-RU' | 'en-US'>('ru-RU');
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const accumulatedTextRef = useRef<string>('');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -23,16 +25,27 @@ export const VoiceInput = ({ onTextReceived, append = false }: VoiceInputProps) 
       const recognition = recognitionRef.current;
       recognition.continuous = true;
       recognition.interimResults = true;
-      recognition.lang = 'ru-RU';
+      recognition.lang = 'ru-RU'; // Start with Russian
 
       recognition.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map(result => result[0])
-          .map(result => result.transcript)
-          .join('');
+        let finalTranscript = '';
+        let interimTranscript = '';
 
-        if (event.results[event.results.length - 1].isFinal) {
-          onTextReceived(append ? transcript : transcript);
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+
+        if (finalTranscript) {
+          accumulatedTextRef.current += finalTranscript + ' ';
+          onTextReceived(accumulatedTextRef.current);
+        } else if (interimTranscript) {
+          // Show interim results in real-time
+          onTextReceived(accumulatedTextRef.current + interimTranscript);
         }
       };
 
@@ -49,15 +62,16 @@ export const VoiceInput = ({ onTextReceived, append = false }: VoiceInputProps) 
         setIsRecording(false);
       };
     }
-  }, [onTextReceived, append, toast]);
+  }, [onTextReceived, toast]);
 
   const startRecording = () => {
     if (recognitionRef.current && !isRecording) {
       try {
+        accumulatedTextRef.current = '';
         recognitionRef.current.start();
         setIsRecording(true);
         toast({
-          description: "Голосовой ввод начат",
+          description: "Голосовой ввод начат (RU/EN)",
         });
       } catch (error) {
         console.error('Error starting recognition:', error);
